@@ -11,6 +11,21 @@
   --color-bermuda: #78dcca;
   --text-large: 50px;
 
+  --animate-somes: somes 1s ease-in infinite;
+
+  @keyframes somes {
+    10% {
+      color: red;
+
+    }
+
+    50% {
+      color: green;
+      transform: rotate(180deg)
+    }
+
+  }
+
 }
 
 
