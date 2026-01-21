@@ -57,7 +57,7 @@ export default function MealList() {
 
           </CardHeader>
           <CardFooter>
-            <Button className="w-full">View More</Button>
+            <Button onClick={() => nav(`/meals/${meal.idMeal}`)} className="w-full">View More</Button>
           </CardFooter>
         </Card>
       })}
