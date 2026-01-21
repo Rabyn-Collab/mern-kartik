@@ -3,6 +3,7 @@ import Home from "./pages/home/Home";
 import NotFound from "./pages/not-found/NotFound";
 import RootLayout from "./components/RootLayout";
 import MealList from "./pages/meals/MealList.jsx";
+import Meal from "./pages/meals/Meal.jsx";
 
 export default function App() {
 
@@ -14,6 +15,11 @@ export default function App() {
         {
           index: true,
           element: <Home />
+        },
+        {
+          path: 'meal/:id',
+          element: <Meal />
+
         },
         {
           path: 'meal-list/:category',
