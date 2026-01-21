@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { baseUrl } from "../../config/api.js";
+import { useNavigate } from "react-router";
 
 export default function CategoryMealList() {
+  const nav = useNavigate();
   const [data, setData] = useState([]);
   const [load, setLoad] = useState(false);
   const [err, setErr] = useState();
@@ -30,7 +32,6 @@ export default function CategoryMealList() {
   if (load) return <h1>Loading...</h1>
   if (err) return <h1 className="text-red-300">{err}</h1>
 
-  console.log(data);
 
   return (
     <div className="my-10 text-center">
@@ -39,7 +40,9 @@ export default function CategoryMealList() {
 
       <div className="grid grid-cols-4 gap-10 mt-6">
         {data.map((category) => {
-          return <div key={category.idCategory}>
+          return <div
+            onClick={() => nav(`/meal-list/${category.strCategory}`)}
+            className="cursor-pointer" key={category.idCategory}>
             <img src={category.strCategoryThumb} alt="" />
             <h3 className="text-[#E3B55E]">{category.strCategory}</h3>
 
