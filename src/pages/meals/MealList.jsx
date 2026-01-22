@@ -39,7 +39,7 @@ export default function MealList() {
   if (load) return <h1>Loading...</h1>
   if (err) return <h1 className="text-red-300">{err}</h1>
 
-  console.log(data);
+
 
   return (
     <div className="grid grid-cols-3 gap-12 p-5">
@@ -57,7 +57,7 @@ export default function MealList() {
 
           </CardHeader>
           <CardFooter>
-            <Button onClick={() => nav(`/meals/${meal.idMeal}`)} className="w-full">View More</Button>
+            <Button onClick={() => nav(`/meal/${meal.idMeal}`)} className="w-full">View More</Button>
           </CardFooter>
         </Card>
       })}
