@@ -36,6 +36,8 @@ export default function Meal() {
   if (load) return <h1>Loading...</h1>
   if (err) return <h1 className="text-red-300">{err}</h1>
 
+  console.log(data);
+
 
   return (
     <div className='p-5'>
@@ -57,7 +59,7 @@ export default function Meal() {
         {
           Object.keys(meal).map((key) => {
             if (key.includes('strMeasure')) {
-              if (!meal[key].trim()) return;
+              if (!meal[key]?.trim()) return;
               measureKeysNames.push(meal[key]);
             }
           })
