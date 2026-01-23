@@ -1,6 +1,21 @@
+import { useActionState } from "react";
+import { Input } from "../../components/ui/input.jsx";
 import CategoryMealList from "../meals/CategoryMealList.jsx";
+import { useNavigate } from "react-router";
+
 
 export default function Home() {
+  const nav = useNavigate();
+
+  const handleForm = (prevState, formData) => {
+    const search = formData.get('search');
+    if (!search) return;
+    nav(`/search-meal?s=${search}`);
+
+  }
+
+  const [state, action] = useActionState(handleForm, null);
+
   return (
     <div className="text-white px-14">
 
@@ -14,6 +29,13 @@ export default function Home() {
         <img src="https://www.themealdb.com/images/meal-icon.png" alt="" />
       </div>
       <hr />
+
+      <form action={action} className="max-w-sm mt-5">
+        <Input
+          placeholder="Search For Meal"
+          name="search"
+        />
+      </form>
 
       <CategoryMealList />
 
