@@ -1,7 +1,5 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
-import { baseUrl } from '../../config/api.js';
+import { useApi } from '../../hooks/apiHooks.js';
 
 export default function SearchMeal() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,33 +7,8 @@ export default function SearchMeal() {
 
 
   const nav = useNavigate();
-  const [data, setData] = useState([]);
-  const [load, setLoad] = useState(false);
-  const [err, setErr] = useState();
+  const [data, load, err] = useApi('search.php', { s: searchParams.get('s') });
 
-  const getData = async () => {
-    setLoad(true);
-
-    try {
-      const response = await axios.get(`${baseUrl}/search.php`, {
-        params: {
-          s: searchParams.get('s')
-        }
-      });
-      setLoad(false);
-      setData(response.data.meals);
-
-    } catch (err) {
-      setLoad(false);
-      setErr(err.message);
-    }
-
-  }
-
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   if (load) return <h1>Loading...</h1>
   if (err) return <h1 className="text-red-300">{err}</h1>
@@ -47,7 +20,7 @@ export default function SearchMeal() {
 
       {data === null ? <h1>Not Data Available</h1> : <div className='grid grid-cols-4 gap-10'>
 
-        {data.map((meal) => {
+        {data.meals?.map((meal) => {
           return <div key={meal.idMeal}>
             <img
               className='cursor-pointer'

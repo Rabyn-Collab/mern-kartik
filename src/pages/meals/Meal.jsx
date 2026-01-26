@@ -1,48 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+
 import { useParams } from 'react-router'
-import { baseUrl } from '../../config/api.js';
+import { useApi } from '../../hooks/apiHooks.js';
 
 export default function Meal() {
+
+
   const { id } = useParams();
-  const [data, setData] = useState([]);
-  const [load, setLoad] = useState(false);
-  const [err, setErr] = useState();
+  const [data, load, err] = useApi('lookup.php', { i: id });
 
-  const getData = async () => {
-    setLoad(true);
-
-    try {
-      const response = await axios.get(`${baseUrl}/lookup.php`, {
-        params: {
-          i: id
-        }
-      });
-      setLoad(false);
-      setData(response.data.meals);
-
-    } catch (err) {
-      setLoad(false);
-      setErr(err.message);
-    }
-
-  }
-
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   if (load) return <h1>Loading...</h1>
   if (err) return <h1 className="text-red-300">{err}</h1>
 
-  console.log(data);
+
 
 
   return (
     <div className='p-5'>
 
-      {data.map((meal) => {
+      {data.meals?.map((meal) => {
         const videoKey = meal.strYoutube.split('v=')[1];
 
         let ingredientKeysNames = [];
