@@ -2,9 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import Home from "./pages/home/Home";
 import NotFound from "./pages/not-found/NotFound";
 import RootLayout from "./components/RootLayout";
-import MealList from "./pages/meals/MealList.jsx";
-import Meal from "./pages/meals/Meal.jsx";
-import SearchMeal from "./pages/meals/SearchMeal.jsx";
+import TodoAddFrom from "./pages/todos/TodoAddFrom.jsx";
 
 export default function App() {
 
@@ -18,21 +16,15 @@ export default function App() {
           element: <Home />
         },
         {
-          path: 'meal/:id',
-          element: <Meal />
+          path: 'add-todo',
+          element: <TodoAddFrom />
         },
-        {
-          path: 'search-meal',
-          element: <SearchMeal />
-        },
-        {
-          path: 'meal-list/:category',
-          element: <MealList />
-        },
+
         {
           path: '*',
           element: <NotFound />
-        },
+        }
+
 
 
       ]
