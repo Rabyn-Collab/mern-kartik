@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group.jsx"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../components/ui/select.jsx";
 import { Textarea } from "../../components/ui/textarea.jsx";
 import { Switch } from "../../components/ui/switch.jsx";
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "../../components/ui/field.jsx";
+import { Field, FieldGroup } from "../../components/ui/field.jsx";
 import { Checkbox } from "../../components/ui/checkbox.jsx";
 
 const todoSchema = Yup.object({
@@ -16,7 +16,18 @@ const todoSchema = Yup.object({
   gender: Yup.string().required(),
   country: Yup.string().required(),
   message: Yup.string().min(10).max(200).required(),
-  airplanemode: Yup.boolean().required()
+  airplanemode: Yup.boolean().required(),
+  habits: Yup.array().min(1).required(),
+  // image: Yup.mixed().test('fileType', 'Invalid file type', (val) => {
+  //   return val && [
+  //     'image/jpeg',
+  //     'image/png',
+  //     'image/gif',
+  //     'image/webp',
+  //     'image/jpg'
+  //   ].includes(val.type);
+
+  // }).required(),
 });
 
 
@@ -39,7 +50,10 @@ export default function TodoAddFrom() {
             gender: '',
             country: '',
             message: '',
-            airplanemode: false
+            airplanemode: false,
+            habits: [],
+            // image: '',
+            // imageReview: ''
           }}
 
           onSubmit={(val) => {
@@ -144,21 +158,62 @@ export default function TodoAddFrom() {
                     <Field orientation="horizontal">
                       <Checkbox
                         onCheckedChange={(e) => {
-                          console.log(e);
+                          const currentHabits = values.habits
+                          if (e === true) {
+                            setFieldValue("habits", [...currentHabits, "Dance"])
+                          } else {
+                            setFieldValue("habits", currentHabits.filter((item) => item !== "Dance"))
+                          }
                         }}
-                        id="terms-checkbox" name="terms-checkbox" />
-                      <Label htmlFor="terms-checkbox">Accept terms and conditions</Label>
+                        id="habits"
+
+
+                        value="Dance"
+                        name="habits" />
+                      <Label htmlFor="habits">Dance</Label>
                     </Field>
 
                     <Field orientation="horizontal">
-                      <Checkbox id="terms-checkbox" name="terms-checkbox" />
-                      <Label htmlFor="terms-checkbox">Accept terms and conditions</Label>
+                      <Checkbox
+                        onCheckedChange={(e) => {
+                          const currentHabits = values.habits
+                          if (e === true) {
+                            setFieldValue("habits", [...currentHabits, "Sing"])
+                          } else {
+                            setFieldValue("habits", currentHabits.filter((item) => item !== "Sing"))
+                          }
+                        }}
+                        id="terms-checkbox"
+                        value="Sing"
+                        name="habits" />
+                      <Label htmlFor="terms-checkbox">Sing</Label>
                     </Field>
 
 
                   </FieldGroup>
+                  {errors.habits && touched.habits && <div className="text-red-500">{errors.habits}</div>}
 
                 </div>
+
+
+                {/* <div>
+                  <Input
+                    className={'mb-4'}
+                    name="image"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      const url = URL.createObjectURL(file);
+                      setFieldValue("imageReview", url);
+                      setFieldValue("image", file);
+
+                    }}
+                    type='file'
+
+                  />
+
+                  {values.imageReview && !errors.image && <img src={values.imageReview} alt="" />}
+                  {errors.image && touched.image && <div className="text-red-500">{errors.image}</div>}
+                </div> */}
 
 
 
