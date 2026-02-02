@@ -10,6 +10,10 @@ import { Textarea } from "../../components/ui/textarea.jsx";
 import { Switch } from "../../components/ui/switch.jsx";
 import { Field, FieldGroup } from "../../components/ui/field.jsx";
 import { Checkbox } from "../../components/ui/checkbox.jsx";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { addTodo } from "./todoSlice.js";
+import { nanoid } from "@reduxjs/toolkit";
 
 const todoSchema = Yup.object({
   email: Yup.string().email().required(),
@@ -32,6 +36,13 @@ const todoSchema = Yup.object({
 
 
 export default function TodoAddFrom() {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+  // const per = {
+  //   name: 'John',
+  //   age: 100
+  // };
+  // const m = { ...per, m: 9 };
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -57,7 +68,8 @@ export default function TodoAddFrom() {
           }}
 
           onSubmit={(val) => {
-            console.log(val);
+            dispatch(addTodo({ ...val, id: nanoid() }));
+            nav(-1);
 
           }}
           validationSchema={todoSchema}
