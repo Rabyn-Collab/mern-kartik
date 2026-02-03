@@ -1,12 +1,11 @@
 import { useSelector } from "react-redux"
 import { Button } from "../../components/ui/button.jsx";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon } from "lucide-react";
+import DeleteTodo from "../todos/DeleteTodo.jsx";
 
 export default function Home() {
 
   const { todos } = useSelector((state) => state.todoSlice);
-
-  console.log(todos);
 
   return (
     <div className="grid gap-5 grid-cols-3 p-5">
@@ -19,7 +18,8 @@ export default function Home() {
 
           <div className="mt-3 flex gap-5">
             <Button variant="outline"> <EditIcon /> </Button>
-            <Button variant="outline"> <TrashIcon /> </Button>
+            <DeleteTodo id={todo.id} />
+
           </div>
 
 
