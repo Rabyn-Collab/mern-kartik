@@ -3,46 +3,30 @@ import { Button } from "../../components/ui/button.jsx";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card.jsx";
 import { Input } from "../../components/ui/input.jsx";
 import { Label } from "../../components/ui/label.jsx";
-import * as Yup from "yup";
 import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group.jsx";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../components/ui/select.jsx";
 import { Textarea } from "../../components/ui/textarea.jsx";
 import { Switch } from "../../components/ui/switch.jsx";
 import { Field, FieldGroup } from "../../components/ui/field.jsx";
 import { Checkbox } from "../../components/ui/checkbox.jsx";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { addTodo } from "./todoSlice.js";
-import { nanoid } from "@reduxjs/toolkit";
-
-export const todoSchema = Yup.object({
-  email: Yup.string().email().required(),
-  gender: Yup.string().required(),
-  country: Yup.string().required(),
-  message: Yup.string().min(10).max(200).required(),
-  airplanemode: Yup.boolean().required(),
-  habits: Yup.array().min(1).required(),
-  // image: Yup.mixed().test('fileType', 'Invalid file type', (val) => {
-  //   return val && [
-  //     'image/jpeg',
-  //     'image/png',
-  //     'image/gif',
-  //     'image/webp',
-  //     'image/jpg'
-  //   ].includes(val.type);
-
-  // }).required(),
-});
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { todoSchema } from "./TodoAddFrom.jsx";
 
 
-export default function TodoAddFrom() {
+export default function TodoUpdateForm() {
+  const { id } = useParams();
+  const { todos } = useSelector((state) => state.todoSlice);
+
+  const todo = todos.find((todo) => todo.id === id);
+
+
+
+
+
   const dispatch = useDispatch();
   const nav = useNavigate();
-  // const per = {
-  //   name: 'John',
-  //   age: 100
-  // };
-  // const m = { ...per, m: 9 };
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -57,19 +41,15 @@ export default function TodoAddFrom() {
 
         <Formik
           initialValues={{
-            email: '',
-            gender: '',
-            country: '',
-            message: '',
-            airplanemode: false,
-            habits: [],
-            // image: '',
-            // imageReview: ''
+            email: todo.email,
+            gender: todo.gender,
+            country: todo.country,
+            message: todo.message,
+            airplanemode: todo.airplanemode,
+            habits: todo.habits,
           }}
 
           onSubmit={(val) => {
-            dispatch(addTodo({ ...val, id: nanoid() }));
-            nav(-1);
 
           }}
           validationSchema={todoSchema}
@@ -101,11 +81,16 @@ export default function TodoAddFrom() {
                     className="w-fit mt-2">
 
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value="male" id="r2" />
+                      <RadioGroupItem
+
+                        checked={values.gender === "male"}
+                        value="male" id="r2" />
                       <Label htmlFor="r2">Male</Label>
                     </div>
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value="female" id="r3" />
+                      <RadioGroupItem
+                        checked={values.gender === "female"}
+                        value="female" id="r3" />
                       <Label htmlFor="r3">Female</Label>
                     </div>
                   </RadioGroup>
@@ -208,24 +193,6 @@ export default function TodoAddFrom() {
                 </div>
 
 
-                {/* <div>
-                  <Input
-                    className={'mb-4'}
-                    name="image"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      const url = URL.createObjectURL(file);
-                      setFieldValue("imageReview", url);
-                      setFieldValue("image", file);
-
-                    }}
-                    type='file'
-
-                  />
-
-                  {values.imageReview && !errors.image && <img src={values.imageReview} alt="" />}
-                  {errors.image && touched.image && <div className="text-red-500">{errors.image}</div>}
-                </div> */}
 
 
 
