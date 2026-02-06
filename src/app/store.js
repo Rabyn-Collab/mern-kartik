@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { todoSlice } from "../pages/todos/todoSlice.js";
+import { todoSlice } from "../features/todos/todoSlice.js";
 
 
 
