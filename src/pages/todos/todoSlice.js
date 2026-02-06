@@ -28,7 +28,9 @@ export const todoSlice = createSlice({
           return action.payload;
         }
         return todo;
-      })
+      });
+
+      setTodoToLocal(state.todos);
 
     }
 

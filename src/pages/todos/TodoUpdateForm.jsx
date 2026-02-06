@@ -12,6 +12,7 @@ import { Checkbox } from "../../components/ui/checkbox.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { todoSchema } from "./TodoAddFrom.jsx";
+import { updateTodo } from "./todoSlice.js";
 
 
 export default function TodoUpdateForm() {
@@ -50,6 +51,8 @@ export default function TodoUpdateForm() {
           }}
 
           onSubmit={(val) => {
+            dispatch(updateTodo({ ...val, id }));
+            nav(-1);
 
           }}
           validationSchema={todoSchema}
@@ -77,19 +80,20 @@ export default function TodoUpdateForm() {
                   <Label htmlFor="gender">Select Your Gender</Label>
                   <RadioGroup
                     name="gender"
-                    onChange={handleChange}
+                    value={values.gender}
+                    onValueChange={(value) => setFieldValue("gender", value)}
                     className="w-fit mt-2">
 
                     <div className="flex items-center gap-3">
                       <RadioGroupItem
 
-                        checked={values.gender === "male"}
+
                         value="male" id="r2" />
                       <Label htmlFor="r2">Male</Label>
                     </div>
                     <div className="flex items-center gap-3">
                       <RadioGroupItem
-                        checked={values.gender === "female"}
+
                         value="female" id="r3" />
                       <Label htmlFor="r3">Female</Label>
                     </div>
@@ -103,12 +107,17 @@ export default function TodoUpdateForm() {
                   <Label htmlFor="country">Select Your Country</Label>
                   <Select
                     name="country"
+                    defaultValue={values.country}
                     onValueChange={(e) => setFieldValue("country", e)}
                   >
                     <SelectTrigger className="w-full max-w-48">
-                      <SelectValue placeholder="Select country" />
+                      <SelectValue
+
+                        placeholder="Select country" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent
+
+                    >
                       <SelectGroup>
                         <SelectLabel>Country</SelectLabel>
                         <SelectItem value="nepal">Nepal</SelectItem>
@@ -136,6 +145,7 @@ export default function TodoUpdateForm() {
 
                 <div className="flex items-center space-x-2">
                   <Switch
+                    checked={values.airplanemode}
                     name="airplanemode"
                     onCheckedChange={(e) => setFieldValue("airplanemode", e)}
                     id="airplane-mode" />
@@ -154,6 +164,7 @@ export default function TodoUpdateForm() {
                     className="max-w-sm mt-4">
                     <Field orientation="horizontal">
                       <Checkbox
+                        checked={values.habits.includes("Dance")}
                         onCheckedChange={(e) => {
                           const currentHabits = values.habits
                           if (e === true) {
@@ -172,6 +183,7 @@ export default function TodoUpdateForm() {
 
                     <Field orientation="horizontal">
                       <Checkbox
+                        checked={values.habits.includes("Sing")}
                         onCheckedChange={(e) => {
                           const currentHabits = values.habits
                           if (e === true) {
