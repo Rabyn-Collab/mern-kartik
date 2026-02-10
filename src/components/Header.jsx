@@ -4,10 +4,10 @@ export default function Header() {
   return (
     <div className=" px-9  py-2 flex items-baseline justify-between">
 
-      <h1>Todo App</h1>
+      <h1>Blog App</h1>
 
       <nav>
-        <NavLink to={'/add-todo'}>Add Todo</NavLink>
+        <NavLink to={'/add-blog'}>Add Blog</NavLink>
       </nav>
 
 

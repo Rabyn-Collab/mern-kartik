@@ -13,10 +13,12 @@ export const blogApi = createApi({
 
 
     getBlogs: builder.query({
-      query: () => ({
+      query: (query) => ({
         url: '/blogs',
+        params: query,
         method: 'GET',
-      })
+      }),
+
     }),
 
 
