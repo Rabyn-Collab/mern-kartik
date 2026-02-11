@@ -9,30 +9,37 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Formik } from "formik"
-import * as Yup from 'yup'
 import { Textarea } from "../../components/ui/textarea.jsx"
-import { useAddBlogMutation } from "./blogApi.js"
-import { useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { toast } from "sonner"
 import { Spinner } from "../../components/ui/spinner.jsx"
+import { valSchema } from "./AddBlog.jsx"
+import { useGetBlogQuery, useUpdateBlogMutation } from "./blogApi.js"
 
-export const valSchema = Yup.object({
-  title: Yup.string().required('Required'),
-  detail: Yup.string().required('Required'),
-  author: Yup.string().required('Required'),
-  image: Yup.string().url().required('Required'),
-});
 
-export default function AddBlog() {
 
-  const [addBlog, { isLoading }] = useAddBlogMutation();
+export default function UpdateBlog() {
+  const { id } = useParams();
+  const { data, isLoading, error } = useGetBlogQuery(id);
   const nav = useNavigate();
+
+  const [updateBlog, { isLoading: isLoad }] = useUpdateBlogMutation();
+
+
+  if (isLoading) return <h1>Loading...</h1>
+  if (error) return <h1 className="text-red-500">{error.message || error.error}</h1>
+
+
+
+
+
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Add a Blog</CardTitle>
+        <CardTitle>Update a Blog</CardTitle>
         <CardDescription>
-          Enter detail to add a blog
+          Enter detail to update a blog
         </CardDescription>
 
       </CardHeader>
@@ -42,24 +49,26 @@ export default function AddBlog() {
 
         <Formik
           initialValues={{
-            title: '',
-            detail: '',
-            author: '',
-            image: ''
+            title: data.title,
+            detail: data.detail,
+            author: data.author,
+            image: data.image
           }}
 
           onSubmit={async (val) => {
 
             try {
-
-              await addBlog(val).unwrap();
-              toast.success('Blog added successfully');
+              await updateBlog({
+                id,
+                body: val
+              }).unwrap();
+              toast.success('Blog updated successfully');
               nav(-1);
-
             } catch (err) {
-              toast.error(err.data.message);
-
+              toast.error(err.message);
             }
+
+
 
           }}
           validationSchema={valSchema}
@@ -77,11 +86,11 @@ export default function AddBlog() {
                 <div className="grid gap-2">
                   <Label htmlFor="title">Title</Label>
                   <Input
-                    name='title'
                     value={values.title}
                     onChange={handleChange}
                     id="title"
                     type="text"
+                    name='title'
                     placeholder="hello title"
 
                   />
@@ -132,9 +141,9 @@ export default function AddBlog() {
 
 
               <Button
-                disabled={isLoading}
+                disabled={isLoad}
                 type="submit" className="w-full mt-5">
-                {isLoading ? <Spinner /> : 'Submit'}
+                {isLoad ? <Spinner /> : 'Submit'}
               </Button>
             </form>
 

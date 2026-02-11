@@ -1,11 +1,14 @@
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useGetBlogsQuery } from "../blogs/blogApi.js"
 import { Formik } from "formik";
 import { Input } from "../../components/ui/input.jsx";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card.jsx";
 import { Button } from "../../components/ui/button.jsx";
+import RemoveBlog from "../blogs/RemoveBlog.jsx";
 
 export default function Home() {
+
+  const nav = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const queryObj = searchParams.get('search') === null ? {} : {
@@ -32,9 +35,10 @@ export default function Home() {
           initialValues={{
             search: ''
           }}
-          onSubmit={(val) => {
+          onSubmit={(val, { resetForm }) => {
 
-            setSearchParams({ search: val.search })
+            setSearchParams({ search: val.search });
+            resetForm();
 
           }}
         >
@@ -70,8 +74,12 @@ export default function Home() {
               <CardDescription>{blog.detail}</CardDescription>
             </CardHeader>
             <CardFooter className='gap-3 max-sm:flex-col max-sm:items-stretch'>
-              <Button>Explore More</Button>
-              <Button variant={'outline'}>Download Now</Button>
+              <Button
+                onClick={() => nav(`/update-blog/${blog.id}`)}
+              >Edit</Button>
+
+              <RemoveBlog id={blog.id} />
+
             </CardFooter>
           </Card>
         })}
