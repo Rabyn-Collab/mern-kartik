@@ -1,17 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { blogApi } from "../features/blogs/blogApi.js";
-
+import { translateApi } from "../features/translate/translateApi.js";
 
 
 
 export const store = configureStore({
   reducer: {
-    [blogApi.reducerPath]: blogApi.reducer
-
+    [translateApi.reducerPath]: translateApi.reducer
 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
-      blogApi.middleware
+      translateApi.middleware
     ]),
 });
