@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { quoteApi } from "../features/quotes/quoteApi.js";
-
+import { movieApi } from "../features/movies/movieApi.js";
 
 export const store = configureStore({
   reducer: {
 
-    [quoteApi.reducerPath]: quoteApi.reducer
+    [movieApi.reducerPath]: movieApi.reducer
+
+
 
 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
-      quoteApi.middleware
+
+      movieApi.middleware
     ]),
 });
