@@ -1,5 +1,6 @@
 import { useParams } from "react-router"
 import { useGetMovieQuery } from "./movieApi.js";
+import MovieVideo from "./MovieVideo.jsx";
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -8,8 +9,16 @@ export default function MovieDetail() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
-  console.log(data);
+
+
   return (
-    <div>MovieDetail</div>
+    <div>
+
+      <h1>{data.title}</h1>
+      <p>{data.overview}</p>
+      <img src={`https://image.tmdb.org/t/p/w500${data.poster_path}`} alt="" />
+
+      <MovieVideo id={data.id} />
+    </div>
   )
 }

@@ -28,8 +28,11 @@ export const movieApi = createApi({
       })
     }),
     getPopularMovie: builder.query({
-      query: () => ({
+      query: (page) => ({
         url: '/movie/popular',
+        params: {
+          page
+        },
         method: 'GET',
       })
     }),
@@ -46,6 +49,13 @@ export const movieApi = createApi({
       })
     }),
 
+    getVideoMovie: builder.query({
+      query: (id) => ({
+        url: `/movie/${id}/videos`,
+        method: 'GET',
+      })
+    }),
+
 
 
   }),
@@ -56,5 +66,6 @@ export const {
   useGetPopularMovieQuery,
   useGetTopRatedQuery,
   useGetUpComingQuery,
-  useGetMovieQuery
+  useGetMovieQuery,
+  useGetVideoMovieQuery
 } = movieApi;
