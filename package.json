@@ -18,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/Rabyn-Collab/mern-kartik/issues"
   },
-  "homepage": "https://github.com/Rabyn-Collab/mern-kartik#readme"
+  "homepage": "https://github.com/Rabyn-Collab/mern-kartik#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1",
+    "morgan": "^1.10.1"
+  }
 }
