@@ -3,13 +3,13 @@ import productRoutes from './routes/productRoutes.js';
 const app = express();
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 
 
-dotenv.config({
-
-});
+dotenv.config({});
 
 app.use(express.json());
+app.use(morgan('dev'));
 
 
 mongoose.connect(process.env.DB_URL).then((val) => {
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 
 
 
-app.use('/products', productRoutes);
+app.use('/api/products', productRoutes);
 
 
 
