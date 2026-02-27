@@ -1,5 +1,6 @@
 import express from 'express';
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 const app = express();
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 
 
 
+app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 
 
