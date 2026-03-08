@@ -13,6 +13,8 @@ export default function ProductList() {
   if (error) return <p>{error.data}</p>
 
 
+
+
   return (
     <div className="grid gap-8 
                       sm:grid-cols-2 
