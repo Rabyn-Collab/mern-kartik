@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
 
 
 
@@ -45,18 +46,38 @@ export const registerUser = async (req, res) => {
   try {
 
     const isExist = await User.findOne({ email });
-    if (isExist) return res.status(409).json({ message: "User already exists" });
-
+    if (isExist) {
+      fs.unlink(`./uploads/${req.imagePath}`, (imageErr) => {
+        if (imageErr) {
+          return res.status(500).json({
+            message: err.message
+          });
+        } else {
+          return res.status(409).json({ message: "User already exists" });
+        }
+      });
+    }
     const hashPass = bcrypt.hashSync(password, 10);
     await User.create({
       fullname,
       email,
-      password: hashPass
+      password: hashPass,
+      image: req.imagePath
     });
     return res.status(201).json({ message: "User created" });
   } catch (err) {
 
-    return res.status(400).json({ message: err.message });
+    fs.unlink(`./uploads/${req.imagePath}`, (imageErr) => {
+      if (imageErr) {
+        return res.status(500).json({
+          message: err.message
+        });
+      } else {
+        return res.status(400).json({ message: err.message });
+      }
+    });
+
+
 
   }
 }
