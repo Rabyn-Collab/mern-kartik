@@ -5,6 +5,19 @@ import fs from 'fs';
 
 
 
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('-password');
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message
+    });
+  }
+}
+
+
+
 export const loginUser = async (req, res) => {
   const { email, password } = req.body || {};
 
