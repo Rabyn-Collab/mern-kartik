@@ -16,6 +16,50 @@ export const getUser = async (req, res) => {
   }
 }
 
+export const updateUser = async (req, res) => {
+  const { fullname, email } = req.body || {};
+  try {
+
+    const isExist = await User.findById(req.userId);
+
+    isExist.fullname = fullname || isExist.fullname;
+    isExist.email = email || isExist.email;
+    if (req.imagePath) {
+      fs.unlink(`./uploads/${isExist.image}`, async (err) => {
+        if (err) {
+          return res.status(500).json({
+            message: err.message
+          });
+        }
+        isExist.image = req.imagePath;
+        await isExist.save();
+      })
+
+    } else {
+      await isExist.save();
+    }
+
+
+    return res.status(200).json({ message: "User updated" });
+  } catch (err) {
+
+    if (req.imagePath) {
+      fs.unlink(`./uploads/${req.imagePath}`, (imageErr) => {
+        if (imageErr) {
+          return res.status(500).json({
+            message: err.message
+          });
+        }
+      });
+    } else {
+      return res.status(400).json({
+        message: err.message
+      });
+    }
+
+  }
+}
+
 
 
 export const loginUser = async (req, res) => {
