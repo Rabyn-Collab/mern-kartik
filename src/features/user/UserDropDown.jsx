@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useGetProfileQuery } from './userApi.js'
 import { base } from '../../app/mainApi.js'
+import { useNavigate } from 'react-router'
 
 const listItems = [
   {
@@ -39,9 +40,10 @@ const listItems = [
 
 
 export default function UserDropDown({ user }) {
+  const nav = useNavigate();
   const { isLoading, data, error } = useGetProfileQuery(user?.token);
   if (isLoading) return <p>Loading...</p>
-  if (error) return <p>{error.data.message}</p>
+  if (error) return <p>{error.data?.message}</p>
 
   return (
     <DropdownMenu>
@@ -54,7 +56,27 @@ export default function UserDropDown({ user }) {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
           {listItems.map((item, index) => (
-            <DropdownMenuItem key={index}>
+            <DropdownMenuItem
+              onClick={() => {
+                switch (item.property) {
+                  case 'Profile':
+                    nav('/profile');
+
+                    break;
+                  case 'Settings':
+                    break;
+                  case 'Billing':
+                    break;
+                  case 'Notifications':
+                    break;
+                  case 'Sign Out':
+                    break;
+                  default:
+                    break;
+                }
+              }}
+
+              key={index}>
               <item.icon />
               <span className='text-popover-foreground'>{item.property}</span>
             </DropdownMenuItem>

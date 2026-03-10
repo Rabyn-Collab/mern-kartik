@@ -3,6 +3,7 @@ import RootLayout from "./components/RootLayout.jsx";
 import Home from "./features/home/Home.jsx";
 import Login from "./features/auth/Login.jsx";
 import Register from "./features/auth/Register.jsx";
+import UserProfile from "./features/user/UserProfile.jsx";
 
 export default function App() {
 
@@ -23,6 +24,10 @@ export default function App() {
         {
           path: 'register',
           element: <Register />
+        },
+        {
+          path: 'profile',
+          element: <UserProfile />
         }
 
 
