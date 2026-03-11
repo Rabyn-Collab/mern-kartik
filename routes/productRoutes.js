@@ -3,6 +3,7 @@ import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } 
 import { notAllowed } from '../utils/notAllowed.js';
 import { fileCheck, updateFileCheck } from '../middleware/fileCheck.js';
 import mongoose from 'mongoose';
+import { adminCheck, userCheck } from '../middleware/userCheck.js';
 
 
 
@@ -15,9 +16,9 @@ router.param('id', (req, res, next, id) => {
   next();
 });
 
-router.route('/').get(getProducts).post(fileCheck, createProduct).all(notAllowed);
+router.route('/').get(getProducts).post(userCheck, adminCheck, fileCheck, createProduct).all(notAllowed);
 
-router.route('/:id').get(getProduct).patch(updateFileCheck, updateProduct).delete(deleteProduct);
+router.route('/:id').get(getProduct).patch(userCheck, adminCheck, updateFileCheck, updateProduct).delete(userCheck, adminCheck, deleteProduct);
 
 
 export default router;
