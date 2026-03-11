@@ -20,7 +20,12 @@ export default function Header() {
           <Button variant="outline" className={'bg-none'}>Login</Button>
         </NavLink>
 
-        <Button className={'bg-blue-500'}>SignUp</Button>
+
+        <NavLink to={'/register'}>
+          <Button className={'bg-blue-500'}>SignUp</Button>
+        </NavLink>
+
+
 
       </nav>}
 
