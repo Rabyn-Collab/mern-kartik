@@ -5,6 +5,7 @@ import { useGetProductsQuery } from "../products/productApi.js";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useNavigate } from "react-router";
+import RemoveProduct from "../products/RemoveProduct.jsx";
 
 export default function AdminPage() {
 
@@ -58,21 +59,22 @@ export default function AdminPage() {
                     </div>
                   </TableCell>
                   <TableCell>Rs.{item.price}</TableCell>
-                  <TableCell>{item.category}</TableCell>
                   <TableCell>{item.stock}</TableCell>
+                  <TableCell>{item.category}</TableCell>
+
                   <TableCell>{item.brand}</TableCell>
                   <TableCell>
-                    <Button variant="outline">
+                    <Button
+                      onClick={() => nav(`/admin/form/edit/${item._id}`)}
+                      variant="outline">
 
                       <EditIcon />
                     </Button>
 
                   </TableCell>
                   <TableCell className='text-right'>
-                    <Button variant="outline">
+                    <RemoveProduct id={item._id} />
 
-                      <TrashIcon />
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

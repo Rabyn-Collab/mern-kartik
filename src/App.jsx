@@ -42,7 +42,7 @@ export default function App() {
           element: <Add />
         },
         {
-          path: 'admin/form/edit',
+          path: 'admin/form/edit/:id',
           element: <Edit />
         }
 

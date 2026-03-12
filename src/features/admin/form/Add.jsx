@@ -24,6 +24,7 @@ import { useNavigate } from "react-router"
 import { Textarea } from "../../../components/ui/textarea.jsx"
 import { useAddProductMutation } from "../../products/productApi.js"
 import { Spinner } from "../../../components/ui/spinner.jsx"
+import { useSelector } from "react-redux"
 
 export const categories = [
   "Electronics",
@@ -55,10 +56,12 @@ const addSchema = Yup.object({
   stock: Yup.number().required('Stock is required'),
   image: Yup.mixed().test('file Type', 'Unsupported file', (val) => {
     return val && ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif'].includes(val.type)
-  }),
+  }).required(),
 })
 
 export default function Add() {
+
+  const { user } = useSelector(state => state.userSlice);
 
   const nav = useNavigate();
   const [addProduct, { isLoading }] = useAddProductMutation();
@@ -89,6 +92,28 @@ export default function Add() {
 
           }}
           onSubmit={async (val) => {
+            const formData = new FormData();
+            formData.append('title', val.title);
+            formData.append('description', val.description);
+            formData.append('price', val.price);
+            formData.append('category', val.category);
+            formData.append('brand', val.brand);
+            formData.append('stock', val.stock);
+            formData.append('image', val.image);
+
+            try {
+              await addProduct({
+                data: formData,
+                token: user.token
+
+              }).unwrap();
+              toast.success('Product added successfully');
+              nav(-1);
+
+            } catch (err) {
+              toast.error(err.data.message);
+
+            }
 
 
           }}
@@ -97,7 +122,7 @@ export default function Add() {
 
         >
 
-          {({ values, errors, touched, handleChange, handleSubmit, }) => (
+          {({ values, errors, touched, handleChange, handleSubmit, setFieldValue }) => (
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
 
@@ -133,7 +158,11 @@ export default function Add() {
                 <div className="grid gap-2">
                   <Label htmlFor="category">Category</Label>
 
-                  <Select>
+                  <Select
+                    onValueChange={(val) => {
+                      setFieldValue('category', val);
+                    }}
+                  >
                     <SelectTrigger className="w-full ">
                       <SelectValue placeholder="Select a Category" />
                     </SelectTrigger>
@@ -155,7 +184,11 @@ export default function Add() {
                 <div className="grid gap-2">
                   <Label htmlFor="brand">Brand</Label>
 
-                  <Select>
+                  <Select
+                    onValueChange={(val) => {
+                      setFieldValue('brand', val);
+                    }}
+                  >
                     <SelectTrigger className="w-full ">
                       <SelectValue placeholder="Select a Brand" />
                     </SelectTrigger>
@@ -212,6 +245,8 @@ export default function Add() {
                     name='image'
                     onChange={(e) => {
                       const file = e.target.files[0];
+
+
 
                       setFieldValue('imageReview', URL.createObjectURL(file));
                       setFieldValue('image', file);
