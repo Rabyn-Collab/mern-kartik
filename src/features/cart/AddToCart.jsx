@@ -9,7 +9,10 @@ export default function AddToCart({ product }) {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userSlice);
-  const [qty, setQty] = useState(1);
+  const { cart } = useSelector((state) => state.cartSlice);
+
+  const isExist = cart.find(item => item.id === product._id);
+  const [qty, setQty] = useState(isExist ? isExist.qty : 1);
 
   const handleCart = () => {
     dispatch(setCart({
@@ -19,7 +22,9 @@ export default function AddToCart({ product }) {
       image: product.image,
       stock: product.stock,
       qty
-    }))
+    }));
+
+    nav('/cart');
   }
 
 
