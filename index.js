@@ -1,14 +1,27 @@
 import express from 'express';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 const app = express();
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import helmet from 'helmet';
 
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+
+app.use(limiter);
+app.use(mongoSanitize());
+app.use(helmet());
 dotenv.config({});
 app.use(cors());
 app.use(express.json());
@@ -39,6 +52,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 
