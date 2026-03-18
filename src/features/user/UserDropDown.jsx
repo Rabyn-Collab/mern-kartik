@@ -1,4 +1,4 @@
-import { UserIcon, BellIcon, LogOutIcon, PanelBottomDashedIcon } from 'lucide-react'
+import { UserIcon, BellIcon, LogOutIcon, PanelBottomDashedIcon, LucideListOrdered } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +21,10 @@ const userItems = [
     property: 'Profile'
   },
   {
+    icon: LucideListOrdered,
+    property: 'Orders'
+  },
+  {
     icon: BellIcon,
     property: 'Notifications'
   },
@@ -38,6 +42,10 @@ const adminItems = [
   {
     icon: PanelBottomDashedIcon,
     property: 'Admin Panel'
+  },
+  {
+    icon: LucideListOrdered,
+    property: 'Orders'
   },
   {
     icon: BellIcon,
@@ -81,7 +89,8 @@ export default function UserDropDown({ user }) {
                   case 'Admin Panel':
                     nav('/admin');
                     break;
-                  case 'Billing':
+                  case 'Orders':
+                    nav('/orders');
                     break;
                   case 'Notifications':
                     break;

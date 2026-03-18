@@ -1,15 +1,16 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Minus, Plus, Trash2 } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { base } from "../../app/mainApi.js";
 import { removeCart, setCart } from "./cartSlice.js";
-
-
+import CheckOut from "./CheckOut.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
   const { cart } = useSelector((state) => state.cartSlice);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.qty,
@@ -17,15 +18,49 @@ export default function CartPage() {
   );
 
   const handleIncrement = (item) => {
-    dispatch(setCart({ ...item, qty: item.qty + 1 }))
-  }
+    if (item.qty < item.stock) {
+      dispatch(setCart({ ...item, qty: item.qty + 1 }));
+    }
+  };
 
   const handleDecrement = (item) => {
-    dispatch(setCart({ ...item, qty: item.qty - 1 }))
+    if (item.qty > 1) {
+      dispatch(setCart({ ...item, qty: item.qty - 1 }));
+    }
+  };
+
+  // ✅ EMPTY CART UI
+  if (cart.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-6">
+
+        {/* Icon */}
+        <div className="bg-gray-100 p-6 rounded-full mb-4 animate-pulse">
+          <ShoppingCart className="w-10 h-10 text-gray-400" />
+        </div>
+
+        {/* Title */}
+        <h2 className="text-2xl font-semibold mb-2">
+          Your cart is empty
+        </h2>
+
+        {/* Subtitle */}
+        <p className="text-gray-500 mb-6 max-w-md">
+          Looks like you haven’t added anything yet. Start shopping to fill your cart.
+        </p>
+
+        {/* CTA */}
+        <Button
+          onClick={() => navigate("/")}
+          className="px-6 py-2 text-base"
+        >
+          Continue Shopping
+        </Button>
+      </div>
+    );
   }
 
-
-
+  // ✅ NORMAL CART UI
   return (
     <div className="max-w-6xl mx-auto p-6">
 
@@ -37,14 +72,18 @@ export default function CartPage() {
         <div className="lg:col-span-2 space-y-4">
 
           {cart.map((item) => (
-            <Card key={item.id}>
+            <Card key={item.id} className="hover:shadow-md transition">
+
               <CardContent className="flex gap-4 items-center p-4">
 
+                {/* Image */}
                 <img
                   src={`${base}/${item.image}`}
-                  className="w-24 h-24 object-cover rounded-md"
+                  className="w-24 h-24 object-cover rounded-md border"
+                  alt={item.title}
                 />
 
+                {/* Info */}
                 <div className="flex-1">
 
                   <h2 className="font-semibold text-lg">
@@ -59,22 +98,28 @@ export default function CartPage() {
                     Stock: {item.stock}
                   </p>
 
-                  {/* Qty */}
+                  {/* Qty Controls */}
                   <div className="flex items-center gap-2 mt-3">
 
                     <Button
                       disabled={item.qty === 1}
                       onClick={() => handleDecrement(item)}
-                      size="icon" variant="outline">
+                      size="icon"
+                      variant="outline"
+                    >
                       <Minus />
                     </Button>
 
-                    <span className="px-3">{item.qty}</span>
+                    <span className="px-3 font-medium">
+                      {item.qty}
+                    </span>
 
                     <Button
                       disabled={item.qty === item.stock}
                       onClick={() => handleIncrement(item)}
-                      size="icon" variant="outline">
+                      size="icon"
+                      variant="outline"
+                    >
                       <Plus />
                     </Button>
 
@@ -97,21 +142,22 @@ export default function CartPage() {
         </div>
 
         {/* Order Summary */}
-        <Card className="h-fit">
+        <Card className="h-fit shadow-md">
+
           <CardContent className="p-6 space-y-4">
 
             <h2 className="text-xl font-semibold">
               Order Summary
             </h2>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Subtotal</span>
               <span>Rs {total}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Shipping</span>
-              <span>Free</span>
+              <span className="text-green-600">Free</span>
             </div>
 
             <hr />
@@ -121,9 +167,10 @@ export default function CartPage() {
               <span>Rs {total}</span>
             </div>
 
-            <Button className="w-full">
-              Checkout
-            </Button>
+            {/* Checkout */}
+            <CheckOut cart={cart} total={total} />
+
+
 
           </CardContent>
         </Card>
@@ -131,5 +178,5 @@ export default function CartPage() {
       </div>
 
     </div>
-  )
+  );
 }
