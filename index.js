@@ -20,10 +20,14 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-app.use(mongoSanitize());
-app.use(helmet());
+//app.use(mongoSanitize());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 dotenv.config({});
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173']
+}));
 app.use(express.json());
 app.use(express.static('uploads'));
 app.use(morgan('dev'));

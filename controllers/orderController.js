@@ -5,11 +5,31 @@ export const getOrders = async (req, res) => {
   const role = req.userRole;
   try {
     if (role !== "admin") {
-      const orders = await Order.find({});
+      const orders = await Order.find({}).populate([
+        {
+          path: "userId",
+          model: "User",
+          select: "-password",
+        },
+        {
+          path: "products.productId",
+          model: "Product",
+        }
+      ]);;
       return res.status(200).json(orders);
 
     } else {
-      const orders = await Order.find({ userId: id });
+      const orders = await Order.find({ userId: id }).populate([
+        {
+          path: "userId",
+          model: "User",
+          select: "-password",
+        },
+        {
+          path: "products.productId",
+          model: "Product",
+        }
+      ]);
       return res.status(200).json(orders);
     }
 
@@ -23,7 +43,17 @@ export const getOrders = async (req, res) => {
 export const getOrder = async (req, res) => {
   const { id } = req.params;
   try {
-    const order = await Order.findById(id);
+    const order = await Order.findById(id).populate([
+      {
+        path: "userId",
+        model: "User",
+        select: "-password",
+      },
+      {
+        path: "products.productId",
+        model: "Product",
+      }
+    ]);
     return res.status(200).json(order);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -32,9 +62,9 @@ export const getOrder = async (req, res) => {
 }
 
 export const createOrder = async (req, res) => {
-  const { totalAmount, products, address } = req.body;
+  const { totalAmount, products } = req.body;
   try {
-    await Order.create({ userId: req.userId, totalAmount, products, address });
+    await Order.create({ userId: req.userId, totalAmount, products });
     return res.status(201).json({
       message: "Order created",
     });

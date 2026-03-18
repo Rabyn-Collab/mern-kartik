@@ -20,10 +20,6 @@ const orderSchema = new mongoose.Schema({
   totalAmount: {
     type: Number,
     required: true
-  },
-  address: {
-    type: Object,
-    required: true
   }
 }, { timestamps: true });
 
