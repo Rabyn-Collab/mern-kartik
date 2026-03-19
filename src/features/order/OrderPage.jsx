@@ -10,6 +10,8 @@ export default function OrderPage() {
 
   const { user } = useSelector((state) => state.userSlice);
   const { isLoading, error, data: orders } = useGetOrdersQuery(user.token);
+
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error.data?.message}</p>;
   return (
