@@ -5,7 +5,7 @@ export const getOrders = async (req, res) => {
   const role = req.userRole;
   try {
     if (role !== "admin") {
-      const orders = await Order.find({}).populate([
+      const orders = await Order.find({ userId: id }).populate([
         {
           path: "userId",
           model: "User",
@@ -19,7 +19,7 @@ export const getOrders = async (req, res) => {
       return res.status(200).json(orders);
 
     } else {
-      const orders = await Order.find({ userId: id }).populate([
+      const orders = await Order.find({}).populate([
         {
           path: "userId",
           model: "User",
