@@ -26,7 +26,7 @@ app.use(helmet({
 }));
 dotenv.config({});
 app.use(cors({
-  origin: ['http://localhost:5173']
+  origin: ['http://localhost:5173', 'https://mern-kartik-rho.vercel.app']
 }));
 app.use(express.json());
 app.use(express.static('uploads'));
