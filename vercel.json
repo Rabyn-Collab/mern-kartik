@@ -3,6 +3,10 @@
   "outputDirectory": "dist",
   "routes": [
     {
+      "src": "/OneSignalSDKWorker.js",
+      "dest": "/OneSignalSDKWorker.js"
+    },
+    {
       "src": "^/assets/(.*)",
       "dest": "/assets/$1"
     },
