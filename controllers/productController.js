@@ -1,11 +1,48 @@
-import Product from "../models/Product.js";
+import Product, { brands, categories } from "../models/Product.js";
 import fs from 'fs';
 
 
 export const getProducts = async (req, res) => {
   try {
 
-    const products = await Product.find({});
+
+
+    const excludedFields = ['search', 'sort', 'fields', 'page', 'limit'];
+
+    const queryObj = { ...req.query };
+    excludedFields.forEach(el => delete queryObj[el]);
+
+    // console.log(queryObj);
+    // { 'price[lt]': '3000' } {price: { $lt: 3000 }}
+    const query = Product.find(queryObj);
+
+    ///
+
+    if (req.query.search) {
+      const search = req.query.search;
+      console.log(search);
+
+      if (categories.some((n) => n.toLowerCase().includes(search.toLowerCase()))) {
+        console.log('hello');
+
+        query.find({ category: { $regex: search, $options: "i" } });
+
+      } else if (brands.some((n) => n.toLowerCase().includes(search.toLowerCase()))) {
+
+        query.find({ brand: { $regex: search, $options: "i" } });
+      }
+
+      query.find({ title: { $regex: search, $options: "i" } });
+
+    }
+
+
+
+    // query.sort();
+
+    // query.select();
+
+    const products = await query;
     return res.status(200).json(products);
 
 
