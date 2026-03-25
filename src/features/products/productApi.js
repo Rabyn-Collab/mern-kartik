@@ -17,10 +17,25 @@ const productApi = mainApi.injectEndpoints({
     }),
 
     getProducts: builder.query({
-      query: () => ({
+      query: (query) => ({
         url: '/products',
-        method: 'GET'
+        method: 'GET',
+        params: query
       }),
+      // ✅ treat all pages as one cache
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+
+      // ✅ append new data instead of replacing
+      merge: (currentCache, newData) => {
+        currentCache.push(...newData);
+      },
+
+      // ✅ refetch when page changes
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
       providesTags: ['Product']
     }),
 

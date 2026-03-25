@@ -47,7 +47,7 @@ export default function AdminPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map(item => (
+              {data.products.map(item => (
                 <TableRow key={item._id}>
                   <TableCell>
                     <div className='flex items-center gap-3'>
