@@ -1,11 +1,29 @@
 import Product, { brands, categories } from "../models/Product.js";
 import fs from 'fs';
 
+function convertQuery(queryObj) {
+  const mongoQuery = {};
+
+  for (const key in queryObj) {
+    const match = key.match(/(\w+)\[(\w+)\]/);
+
+    if (match) {
+      const field = match[1];      // rating
+      const operator = match[2];   // gt
+
+      if (!mongoQuery[field]) mongoQuery[field] = {};
+
+      mongoQuery[field][`$${operator}`] = Number(queryObj[key]);
+    } else {
+      mongoQuery[key] = queryObj[key];
+    }
+  }
+
+  return mongoQuery;
+}
 
 export const getProducts = async (req, res) => {
   try {
-
-
 
     const excludedFields = ['search', 'sort', 'fields', 'page', 'limit'];
 
@@ -14,36 +32,55 @@ export const getProducts = async (req, res) => {
 
     // console.log(queryObj);
     // { 'price[lt]': '3000' } {price: { $lt: 3000 }}
-    const query = Product.find(queryObj);
+
+    const mongoQuery = convertQuery(queryObj);
+    const query = Product.find(mongoQuery);
 
     ///
 
     if (req.query.search) {
       const search = req.query.search;
-      console.log(search);
 
       if (categories.some((n) => n.toLowerCase().includes(search.toLowerCase()))) {
-        console.log('hello');
 
         query.find({ category: { $regex: search, $options: "i" } });
 
       } else if (brands.some((n) => n.toLowerCase().includes(search.toLowerCase()))) {
-
         query.find({ brand: { $regex: search, $options: "i" } });
+      } else {
+        query.find({ title: { $regex: search, $options: "i" } });
       }
 
-      query.find({ title: { $regex: search, $options: "i" } });
 
     }
 
 
+    if (req.query.sort) {
 
-    // query.sort();
+      const sortBy = req.query.sort.split(',').join(' ');
+      query.sort(sortBy);
+    }
 
-    // query.select();
 
-    const products = await query;
-    return res.status(200).json(products);
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query.select(fields);
+    }
+
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await Product.countDocuments();
+    const numOfPages = Math.ceil(totalCount / limit);
+
+
+
+    const products = await query.skip(skip).limit(limit);
+    return res.status(200).json({
+      numOfPages,
+      products
+    });
 
 
   } catch (err) {

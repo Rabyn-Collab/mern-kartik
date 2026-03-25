@@ -13,13 +13,13 @@ import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP, please try again after 15 minutes'
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 100,
+//   message: 'Too many requests from this IP, please try again after 15 minutes'
+// });
 
-app.use(limiter);
+// app.use(limiter);
 //app.use(mongoSanitize());
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
