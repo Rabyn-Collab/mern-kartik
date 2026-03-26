@@ -3,24 +3,36 @@ import { Badge } from "../../components/ui/badge.jsx";
 import { Card, CardContent } from "../../components/ui/card.jsx";
 import { useGetProductsQuery } from "./productApi.js";
 import { base } from "../../app/mainApi.js";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import ProductSkeleton from "./ProductSkeleton.jsx";
 import { Button } from "../../components/ui/button.jsx";
-import { useState } from "react";
+import { useEffect } from "react";
+import SearchComponent from "./SearchComponent.jsx";
 
 export default function ProductList() {
-  const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") || 1;
+  const search = searchParams.get("search") || "";
+
   const nav = useNavigate();
-  const { data, isLoading, error } = useGetProductsQuery({
-    page
+  const { data, isLoading, error, isFetching } = useGetProductsQuery({
+    page,
+    search
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
 
 
 
   if (error) return <p>{error?.data || "Something went wrong"}</p>;
 
+
   return (
     <div>
+      <SearchComponent setSearchParams={setSearchParams} />
       <div
         className="grid gap-8 
       sm:grid-cols-2 
@@ -29,7 +41,7 @@ export default function ProductList() {
       >
 
         {/* Skeleton Loader */}
-        {isLoading &&
+        {(isLoading || isFetching) &&
           Array.from({ length: 8 }).map((_, i) => (
             <ProductSkeleton key={i} />
           ))}
@@ -105,10 +117,17 @@ export default function ProductList() {
       </div>
 
 
-      <div>
-        <Button onClick={() => setPage(page + 1)}>Load More</Button>
+      {(data?.numOfPages > 1 && !search) && <div className="flex my-5 pl-5 gap-5">
+        <Button
+          disabled={Number(page) === 1}
+          onClick={() => setSearchParams({ page: Number(page) - 1 })}>Prev</Button>
+        <h1>{page}</h1>
+        <Button
 
-      </div>
+          disabled={Number(page) === data?.numOfPages}
+          onClick={() => setSearchParams({ page: Number(page) + 1 })}>Next</Button>
+
+      </div>}
 
 
 

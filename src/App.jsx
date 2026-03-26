@@ -10,6 +10,9 @@ import Edit from "./features/admin/form/Edit.jsx";
 import ProductDetail from "./features/products/ProductDetail.jsx";
 import CartPage from "./features/cart/CartPage.jsx";
 import OrderPage from "./features/order/OrderPage.jsx";
+import RedirectMain from "./components/RedirectMain.jsx";
+import AuthRoute from "./components/AuthRoute.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
 
 export default function App() {
 
@@ -23,44 +26,68 @@ export default function App() {
           index: true,
           element: <Home />
         },
+
         {
-          path: 'login',
-          element: <Login />
-        },
-        {
-          path: 'register',
-          element: <Register />
-        },
-        {
-          path: 'profile',
-          element: <UserProfile />
+          element: <RedirectMain />,
+          children: [
+            {
+              path: 'login',
+              element: <Login />
+            },
+            {
+              path: 'register',
+              element: <Register />
+            },
+
+          ]
         },
 
         {
-          path: 'admin',
-          element: <AdminPage />
+          element: <AuthRoute />,
+          children: [
+            {
+              path: 'profile',
+              element: <UserProfile />
+            },
+            {
+              path: 'cart',
+              element: <CartPage />
+            },
+            {
+              path: 'orders',
+              element: <OrderPage />
+            }
+          ]
         },
+
         {
-          path: 'admin/form/add',
-          element: <Add />
+          element: <AdminRoute />,
+          children: [
+            {
+              path: 'admin',
+              element: <AdminPage />
+            },
+            {
+              path: 'admin/form/add',
+              element: <Add />
+            },
+            {
+              path: 'admin/form/edit/:id',
+              element: <Edit />
+            },
+
+          ]
         },
-        {
-          path: 'admin/form/edit/:id',
-          element: <Edit />
-        },
+
+
+
+
 
         {
           path: 'product/:id',
           element: <ProductDetail />
         },
-        {
-          path: 'cart',
-          element: <CartPage />
-        },
-        {
-          path: 'orders',
-          element: <OrderPage />
-        }
+
 
 
 

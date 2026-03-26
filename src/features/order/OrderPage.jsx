@@ -14,6 +14,8 @@ export default function OrderPage() {
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error.data?.message}</p>;
+
+  console.log(orders);
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
 

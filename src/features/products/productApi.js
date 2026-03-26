@@ -22,20 +22,7 @@ const productApi = mainApi.injectEndpoints({
         method: 'GET',
         params: query
       }),
-      // ✅ treat all pages as one cache
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
-      },
 
-      // ✅ append new data instead of replacing
-      merge: (currentCache, newData) => {
-        currentCache.push(...newData);
-      },
-
-      // ✅ refetch when page changes
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg !== previousArg;
-      },
       providesTags: ['Product']
     }),
 
