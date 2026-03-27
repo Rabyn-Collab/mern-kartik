@@ -11,6 +11,7 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 
 
 // const limiter = rateLimit({
@@ -25,7 +26,9 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 dotenv.config({});
+app.use(cookieParser());
 app.use(cors({
+  credentials: true,
   origin: ['http://localhost:5173', 'https://mern-kartik-rho.vercel.app']
 }));
 app.use(express.json());

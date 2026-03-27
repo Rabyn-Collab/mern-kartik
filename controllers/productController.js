@@ -76,6 +76,7 @@ export const getProducts = async (req, res) => {
 
 
 
+
     const products = await query.skip(skip).limit(limit);
     return res.status(200).json({
       numOfPages,
