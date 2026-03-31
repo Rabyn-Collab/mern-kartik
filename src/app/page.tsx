@@ -1,3 +1,5 @@
+import { Post } from "@/models/Post";
+import axios from "axios";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,9 +8,23 @@ export const metadata: Metadata = {
 };
 
 
-export default function Home() {
+export default async function Home() {
+
+  const response = await axios.get('https://jsonplaceholder.typicode.com/comments');
+
+  const posts: Post[] = response.data;
+
+
   return (
     <div>
+
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h1>{post.name}</h1>
+          <p>{post.email}</p>
+          <p>{post.body}</p>
+        </div>
+      ))}
 
 
 
