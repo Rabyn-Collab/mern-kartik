@@ -1,6 +1,7 @@
-import { Post } from "@/models/Post";
-import axios from "axios";
+
+import PostList from "@/components/PostList";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Home Page",
@@ -10,21 +11,23 @@ export const metadata: Metadata = {
 
 export default async function Home() {
 
-  const response = await axios.get('https://jsonplaceholder.typicode.com/comments');
 
-  const posts: Post[] = response.data;
 
 
   return (
     <div>
 
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h1>{post.name}</h1>
-          <p>{post.email}</p>
-          <p>{post.body}</p>
-        </div>
-      ))}
+      <h1>Hello Jee</h1>
+      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga, voluptate, maiores harum distinctio incidunt, quo non obcaecati in autem dolorum nobis nam. Iusto et reprehenderit nihil laboriosam voluptates, provident quaerat?</p>
+
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <PostList />
+
+
+      </Suspense>
+
+
 
 
 
