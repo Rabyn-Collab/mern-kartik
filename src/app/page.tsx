@@ -1,5 +1,7 @@
 
 import PostList from "@/components/PostList";
+import { Employee } from "@/models/Employee";
+import axios from "axios";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -11,21 +13,30 @@ export const metadata: Metadata = {
 
 export default async function Home() {
 
-
+  const response = await axios.get('https://69ad5193b50a169ec87f232e.mockapi.io/employees');
+  const employees: Employee[] = response.data;
 
 
   return (
     <div>
 
-      <h1>Hello Jee</h1>
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga, voluptate, maiores harum distinctio incidunt, quo non obcaecati in autem dolorum nobis nam. Iusto et reprehenderit nihil laboriosam voluptates, provident quaerat?</p>
+      {employees.map((employee) => (
+        <div key={employee.id}>
+          <h5>{employee.name}</h5>
+          <p>{employee.age}</p>
+          <p>{employee.occupation}</p>
+        </div>
+      ))}
 
+      {/* <h1>Hello Jee</h1>
+      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga, voluptate, maiores harum distinctio incidunt, quo non obcaecati in autem dolorum nobis nam. Iusto et reprehenderit nihil laboriosam voluptates, provident quaerat?</p> */}
 
+      {/* 
       <Suspense fallback={<div>Loading...</div>}>
         <PostList />
 
 
-      </Suspense>
+      </Suspense> */}
 
 
 

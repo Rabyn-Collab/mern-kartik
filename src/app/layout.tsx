@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,14 +34,20 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <header>
           <h1>Next Js</h1>
-          <nav>
+          <nav className="flex gap-4">
 
             <Link href={'/about'}>About</Link>
             <Link href={'/contact'}>Contact</Link>
+            <Link href={'/employee/add-form'}>Add Employee</Link>
 
           </nav>
         </header>
-        {children}
+
+        <main className="p-5">
+          {children}
+        </main>
+        <Toaster position="top-center" />
+
 
       </body>
     </html>
