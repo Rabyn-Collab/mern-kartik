@@ -15,10 +15,11 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { addEmployee } from "@/lib/actions";
+import { updateEmployee } from "@/lib/actions";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { Employee } from "@/models/Employee";
 const formSchema = z.object({
   name: z.string().min(5, 'Name must be at least 5 characters long'),
   age: z.coerce.number<number>(),
@@ -27,22 +28,25 @@ const formSchema = z.object({
 
 
 
-export default function EmployeeAddForm() {
+export default function EditEmployee({ employee }: { employee: Employee }) {
   const router = useRouter();
   const [loading, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      age: 18,
-      occupation: ''
+      name: employee.name,
+      age: employee.age,
+      occupation: employee.occupation
     }
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const res = await addEmployee(values);
+      const res = await updateEmployee({
+        ...values,
+        id: employee.id
+      });
       if (res.success) {
         toast.success(res.message);
         router.back();

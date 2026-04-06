@@ -1,8 +1,12 @@
 
+import DeleteEmployee from "@/components/DeleteEmployee";
 import PostList from "@/components/PostList";
+import { Button } from "@/components/ui/button";
 import { Employee } from "@/models/Employee";
 import axios from "axios";
+import { EditIcon } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -18,13 +22,26 @@ export default async function Home() {
 
 
   return (
-    <div>
+    <div className="grid grid-cols-4 gap-5">
 
       {employees.map((employee) => (
-        <div key={employee.id}>
+        <div key={employee.id} className="border-2 p-3">
           <h5>{employee.name}</h5>
           <p>{employee.age}</p>
           <p>{employee.occupation}</p>
+
+          <div className="flex justify-end">
+            <Link href={`/employee/edit/${employee.id}`} >
+              <Button variant={'ghost'}>
+
+                <EditIcon />
+
+              </Button>
+
+
+            </Link>
+            <DeleteEmployee id={employee.id} />
+          </div>
         </div>
       ))}
 
