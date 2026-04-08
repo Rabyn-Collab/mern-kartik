@@ -1,6 +1,17 @@
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-export default function Contact() {
+export default async function Contact() {
+  const { isAuthenticated } = await auth();
+
+  if (!isAuthenticated) {
+    return (
+      <div>
+        <h1>Contact</h1>
+        <Link href={'/login'}>Login</Link>
+      </div>
+    )
+  }
   return (
     <div>
       <h1>Contact</h1>
